@@ -1,16 +1,22 @@
-    # This is a sample Python script.
+import numpy as np
+from tensorflow.keras.preprocessing import image
+import pandas as pd
+from tqdm import tqdm
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+csvData = pd.read_csv('metadata/train/train_labels.csv')
 
+img_width = 350
+img_height = 350
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+X = []
+Y = []
 
+for i in tqdm(range(csvData.shape[0])):
+    path = 'metadata/' + csvData['file_name'][i]
+    img = image.load_img(path, target_size=(img_width, img_height, 3))
+    img = image.img_to_array(img)
+    img = img / 255.0
+    X.append(img)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+X = np.array(X)
+print(len(X))
